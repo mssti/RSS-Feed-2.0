@@ -1,0 +1,4 @@
+// MOD : MSSTI RSS Feeds (V1.0.4) - Start
+	'YOUR_POSTS'				=> 'Vos posts',
+	'RSS_FEEDS'					=> 'RSS Feeds',
+// MOD : MSSTI RSS Feeds (V1.0.4) - End

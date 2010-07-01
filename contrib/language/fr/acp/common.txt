@@ -1,0 +1,6 @@
+// MOD : MSSTI RSS Feeds (V1.0.4) - Start
+	'ACP_RSS'					=> 'Gestion RSS',
+	'ACP_RSS_FEEDS'					=> 'RSS',
+// MOD : MSSTI RSS Feeds (V1.0.4) - End
+
+
