@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rss version="2.0"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:admin="http://webns.net/mvcb/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		
+	<channel>
+		<title>{FEED_TITLE}<!-- IF FEED_MODE --> - {FEED_MODE}<!-- ENDIF --></title>
+		<link>{FEED_LINK}</link>
+	<!--<atom:link href="{FEED_LINK}" rel="alternate" type="application/rss+xml" />-->
+		<description>{FEED_DESCRIPTION}</description>
+		<language>{FEED_LANG}</language>
+		<copyright>Copyright (c) {FEED_COPYRIGHT}</copyright>
+		<managingEditor>{FEED_MANAGING}</managingEditor>
+		<webMaster>{FEED_MANAGING}</webMaster>
+		<pubDate>{FEED_DATE}</pubDate>
+		<lastBuildDate>{FEED_TIME}</lastBuildDate>
+		<generator>MSSTI v1.0.7 - (C) 2008 leviatan21 - http://www.mssti.com/</generator>
+
+		<image>
+			<title>{FEED_TITLE}<!-- IF FEED_MODE --> - {FEED_MODE}<!-- ENDIF --></title>
+			<url>{FEED_IMAGE}</url>
+			<link>{FEED_LINK}</link>
+		</image>
+		<ttl>60</ttl>
+		
+<!-- IF S_ERROR -->
+		<item>
+			<title>{S_ERROR}</title>
+		</item>
+<!-- ELSE -->
+
+	<!-- IF S_STATISTICS and ON_PAGE eq '1' -->
+		<item>
+			<title><![CDATA[{L_FORUM_STATS}]]></title>
+			<description><![CDATA[
+			<table cellspacing="0" cellpadding="5" border="1" id="SiteStats">
+				<tbody>
+					<tr>
+						<td><b>{L_BOARD_STARTED}:</b></td>
+						<td>{STAT_BOARD_STARTED}</td>
+						<td><b>{L_BOARD_DAYS}:</b></td>
+						<td>{STAT_BOARD_DAYS}</td>
+					</tr>
+					<tr>
+						<td><b>{L_BOARD_VERSION}:</b></td>
+						<td>phpbb {STAT_BOARD_VERSION}</td>
+						<td><b>{L_STAT_TIMEZONE}:</b></td>
+						<td>{STAT_TIMEZONE}</td>
+					</tr>
+					<tr>
+						<td><b>{L_NUMBER_POSTS}:</b></td>
+						<td>{STAT_TOTAL_POSTS}</td>
+						<td><b>{L_POSTS_PER_DAY}:</b></td>
+						<td>{STAT_POSTS_PER_DAY}</td>
+					</tr>
+					<tr>
+						<td><b>{L_NUMBER_TOPICS}:</b></td>
+						<td>{STAT_TOTAL_TOPICS}</td>
+						<td><b>{L_TOPICS_PER_DAY}:</b></td>
+						<td>{STAT_TOPICS_PER_DAY}</td>
+					</tr>
+					<tr>
+						<td><b>{L_NUMBER_USERS}:</b></td>
+						<td>{STAT_TOTAL_USERS}</td>
+						<td><b>{L_USERS_PER_DAY}:</b></td>
+						<td>{STAT_USERS_PER_DAY}</td>
+					</tr>
+					<tr>
+						<td><b>{L_NEWEST_USER}:</b></td>
+						<td colspan="3">{STAT_NEWEST_USER}</td>
+					</tr>
+					<tr>
+						<td colspan="4">{STAT_ONLINE_USERS}</td>
+					</tr>
+				</tbody>
+			</table>
+			<hr />]]></description>
+			<content:encoded><![CDATA[<p>{STAT_BOARD_STARTED}<br />{STAT_TOTAL_POSTS} &bull; {STAT_TOTAL_TOPICS} &bull; {STAT_TOTAL_USERS} &bull; {STAT_NEWEST_USER}</p><hr />]]></content:encoded>
+			<guid isPermaLink="true">{FEED_LINK}</guid>
+		</item>
+	<!-- ENDIF -->
+
+	<!-- BEGIN items -->
+		<item>
+			<title>{items.TITLE}</title>
+			<link>{items.LINK}</link>
+	<!-- IF FEED_TEXT or items.STATISTICS -->
+			<description><![CDATA[<!-- IF FEED_TEXT -->{items.DESCRIPTION}<!-- ENDIF --><!-- IF items.STATISTICS --><p>{items.STATISTICS}</p><!-- ENDIF --><hr />]]></description>
+		<!-- IF FEED_TEXT -->
+			<content:encoded><![CDATA[{items.DESCRIPTION}]]></content:encoded>
+		<!-- ENDIF -->
+	<!-- ENDIF -->
+			<!-- IF items.CATEGORY --><category domain="{items.CATEGORY}"><![CDATA[{items.CATEGORY_NAME}]]></category><!-- ENDIF -->
+			<!-- IF items.AUTHOR --><author>{items.AUTHOR}</author><!-- ENDIF -->
+			<!-- IF items.PUBDATE --><pubDate>{items.PUBDATE}</pubDate><!-- ENDIF -->
+			<!-- IF items.GUID --><guid isPermaLink="false">{items.GUID}</guid><!-- ENDIF -->
+		</item>
+	<!-- END items -->
+
+	<!-- IF PAGINATION -->
+		<item>
+			<title>{L_JUMP_TO_PAGE}</title>
+			<description><![CDATA[
+			<div class="pagination">
+				 <!-- IF PAGINATION --> {PAGE_NUMBER} &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF -->
+			</div>
+			<hr />]]></description>
+			<guid isPermaLink="false">{FEED_INDEX}</guid>
+        </item>
+	<!-- ENDIF -->
+<!-- ENDIF -->
+
+	</channel>
+</rss>
