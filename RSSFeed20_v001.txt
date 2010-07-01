@@ -1,0 +1,291 @@
+#####################################################################
+## MOD Title: RSS Feed 2.0
+##
+## MOD Author: leviatan21 < info@mssti.com > (Gabriel) http://www.mssti.com/phpbb3/
+##
+## MOD Description: This MOD adds a Really Simple Syndication (RSS) content to your forum.
+##		Can display list of Forums, Topics, Post, user post ( like ego search ) a particular forum or particular topic.
+##		Also It have pagination to have a fast view and better performance.
+##
+## MOD Version: 0.0.1
+##
+## Installation Level: Easy
+## Installation Time: ~5 Minutes
+##
+## Files To Edit:
+##	includes/functions.php
+##	language/en/common.php
+##	language/en/acp/common.php
+##	styles/prosilver/template/overall_header.html
+##	styles/subsilver2/template/overall_header.html
+##
+## Included Files:
+##	rss.php
+##	includes/acp/acp_rss.php
+##	includes/acp/info/acp_rss.php
+##	language/en/mods/rss.php
+##	styles/rss_template.xml
+#
+## License: http://opensource.org/licenses/gpl-license.php GNU General Public License v2 
+#####################################################################
+## For security purposes, please check: http://www.phpbb.com/mods/
+## for the latest version of this MOD. Although MODs are checked
+## before being allowed in the MODs Database there is no guarantee
+## that there are no security problems within the MOD. No support
+## will be given for MODs not found within the MODs Database which
+## can be found at http://www.phpbb.com/mods/
+#####################################################################
+## Author Notes:
+##
+##	RSS Feed Parser in Conjunction with Feeds Everywhere
+##	W3C Feed Validation Service
+##	
+##-------------------------------------------------------------------
+##	EasyMOD
+##	-----------
+##	This MOD is NOT Tested with EasyMod
+##
+##-------------------------------------------------------------------
+##	SQL commands
+##	-----------
+##	This MOD needs a database update
+##
+##-------------------------------------------------------------------
+##	Translation : 
+##	en [English]
+##
+##-------------------------------------------------------------------
+##	Official last version
+##	-----------
+##	Meanwhile the phpBB group validation and as the MOD is not yet
+##	in the phpBB MOD database, check this official link for updates...
+##	http://www.mssti.com/phpbb3/index.php
+##	If you want to test this board, you can use a demo acount :
+##	Please visit : http://www.mssti.com/phpbb3/viewtopic.php?f=2&t=1
+##
+#####################################################################
+## MOD History:
+##
+##	2008-01-10 - Version 0.0.1
+##	- First release to phpbb3.0.1 (Gold)
+##
+#####################################################################
+## Before Adding This MOD To Your Forum, You Should Back Up All Files Related To This MOD
+#####################################################################
+
+#
+#-----[ SQL ]--------------------------------------------------------
+# NOTE : Change the table prefix to adjust to your install. I use "phpbb_" as example.
+#
+
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_enable', '1', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_overall_forums', '1', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_overall_threads', '1', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_overall_posts', '1', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_egosearch', '1', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_forum', '1', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_thread', '1', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_characters', '1000', 1);
+INSERT INTO phpbb_config (config_name, config_value, is_dynamic) VALUES ('rss_limit', '30', 1);
+
+#
+#-----[ COPY ]-------------------------------------------------------
+#
+
+copy root/rss.php                       to rss.php
+copy root/includes/acp/acp_rss.php      to includes/acp/acp_rss.php
+copy root/includes/acp/info/acp_rss.php to includes/acp/info/acp_rss.php
+copy root/language/en/mods/rss.php      to language/en/mods/rss.php
+copy root/styles/rss_template.xml       to styles/rss_template.xml
+
+#
+#-----[ OPEN ]-------------------------------------------------------
+#
+includes/functions.php
+#
+#-----[ FIND ]-------------------------------------------------------
+#
+	// The following assigns all _common_ variables that may be used at any point in a template.
+#
+#-----[ AFTER, ADD ]------------------------------------------------
+# NOTE: Add these lines on a new blank line after the preceding line(s) to find.
+#
+
+// MOD : RSS Feeds (V0.0.1) - Start
+		$f_rss = request_var('f', 0);
+		$t_rss = request_var('t', 0);
+// MOD : RSS Feeds (V0.0.1) - End
+
+#
+#-----[ FIND ]-------------------------------------------------------
+#
+		'SITE_LOGO_IMG'			=> $user->img('site_logo'))
+#
+#-----[ BEFORE, ADD ]------------------------------------------------
+# NOTE: Add these lines on a new blank line before the preceding line(s) to find.
+#
+
+// MOD : RSS Feeds (V0.0.1) - Start
+		'U_RSS'						=> generate_board_url() . "/rss.$phpEx",
+		'S_FORUM_ID'				=> $f_rss, 
+		'S_TOPIC_ID'				=> $t_rss,
+		'S_ENABLE_FEEDS'			=> ($config['rss_enable']) ? true : false,
+		'S_ENABLE_FEEDS_FORUMS'		=> ($config['rss_overall_forums']) ? true : false,
+		'S_ENABLE_FEEDS_THREADS'	=> ($config['rss_overall_threads']) ? true : false,
+		'S_ENABLE_FEEDS_POSTS'		=> ($config['rss_overall_posts']) ? true : false,
+		'S_ENABLE_FEEDS_EGOSEARCH'	=> ($config['rss_egosearch'] && $user->data['user_id'] != ANONYMOUS) ? true : false,
+		'S_ENABLE_FEEDS_FORUM'		=> ($config['rss_forum']  && $f_rss != 0) ? true : false,
+		'S_ENABLE_FEEDS_THREAD'		=> ($config['rss_thread'] && $t_rss != 0) ? true : false,
+// MOD : RSS Feeds (V0.0.1) - End
+
+#
+#-----[ OPEN ]-------------------------------------------------------
+#
+language/en/common.php
+#
+#-----[ FIND ]-------------------------------------------------------
+#
+	'SEARCH_SELF'				=> 'View your posts',
+#
+#-----[ AFTER, ADD ]------------------------------------------------
+# NOTE: Add these lines on a new blank line after the preceding line(s) to find.
+#
+
+// MOD : RSS Feeds (V0.0.1) - Start
+	'YOUR_POSTS'				=> 'Your posts',
+// MOD : RSS Feeds (V0.0.1) - End
+
+#
+#-----[ OPEN ]-------------------------------------------------------
+#
+language/en/acp/common.php
+#
+#-----[ FIND ]-------------------------------------------------------
+#
+	'ACP_WORDS'					=> 'Word censoring',
+#
+#-----[ AFTER, ADD ]------------------------------------------------
+# NOTE: Add these lines on a new blank line after the preceding line(s) to find.
+#
+
+// MOD : RSS Feeds (V0.0.1) - Start
+	'ACP_RSS'					=> 'RSS management',
+	'ACP_RSS_FEEDS'				=> 'RSS',
+// MOD : RSS Feeds (V0.0.1) - End
+
+#
+#-----[ OPEN ]-------------------------------------------------------
+# NOTE: You will have to make this change to ALL themes you have installed, based on prosilver. I use "prosilver" as an example.
+#
+styles/prosilver/template/overall_header.html
+#
+#-----[ FIND ]-------------------------------------------------------
+#
+<title>{SITENAME} &bull; <!-- IF S_IN_MCP -->{L_MCP} &bull; <!-- ELSEIF S_IN_UCP -->{L_UCP} &bull; <!-- ENDIF -->{PAGE_TITLE}</title>
+#
+#-----[ AFTER, ADD ]------------------------------------------------
+# NOTE: Add these lines on a new blank line after the preceding line(s) to find.
+#
+
+<!-- // MOD : RSS Feeds (V0.0.1) - Start-->
+
+<!-- IF S_ENABLE_FEEDS -->
+<link rel="alternate" type="application/rss+xml" title="RSS {SITENAME}" href="{U_RSS}" />
+<!-- IF S_ENABLE_FEEDS_FORUMS -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_ALL_FORUMS}" href="{U_RSS}?mode=forum" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_THREADS -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_ALL_TOPICS}" href="{U_RSS}?mode=topics" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_POSTS -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_ALL_POSTS}" href="{U_RSS}?mode=posts" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_EGOSEARCH && S_USER_LOGGED_IN -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_YOUR_POSTS}" href="{U_RSS}?mode=egosearch" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_FORUM && S_FORUM_ID -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_FORUM} {PAGE_TITLE}" href="{U_RSS}?f={S_FORUM_ID}" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_THREAD && S_TOPIC_ID -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_TOPIC} {PAGE_TITLE}" href="{U_RSS}?t={S_TOPIC_ID}" />
+<!-- ENDIF -->
+<!-- ENDIF -->
+
+<!-- // MOD : RSS Feeds (V0.0.1) - End -->
+
+#
+#-----[ OPEN ]-------------------------------------------------------
+# NOTE: You will have to make this change to ALL themes you have installed, based on subsilver2. I use "subsilver2" as an example.
+#
+styles/subsilver2/template/overall_header.html
+#
+#-----[ FIND ]-------------------------------------------------------
+#
+<title>{SITENAME} &bull; <!-- IF S_IN_MCP -->{L_MCP} &bull; <!-- ELSEIF S_IN_UCP -->{L_UCP} &bull; <!-- ENDIF -->{PAGE_TITLE}</title>
+#
+#-----[ AFTER, ADD ]------------------------------------------------
+# NOTE: Add these lines on a new blank line after the preceding line(s) to find.
+#
+
+<!-- // MOD : RSS Feeds (V0.0.1) - Start-->
+
+<!-- IF S_ENABLE_FEEDS -->
+<link rel="alternate" type="application/rss+xml" title="RSS {SITENAME}" href="{U_RSS}" />
+<!-- IF S_ENABLE_FEEDS_FORUMS -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_ALL_FORUMS}" href="{U_RSS}?mode=forum" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_THREADS -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_ALL_TOPICS}" href="{U_RSS}?mode=topics" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_POSTS -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_ALL_POSTS}" href="{U_RSS}?mode=posts" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_EGOSEARCH && S_USER_LOGGED_IN -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_YOUR_POSTS}" href="{U_RSS}?mode=egosearch" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_FORUM && S_FORUM_ID -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_FORUM} {PAGE_TITLE}" href="{U_RSS}?f={S_FORUM_ID}" />
+<!-- ENDIF -->
+<!-- IF S_ENABLE_FEEDS_THREAD && S_TOPIC_ID -->
+<link rel="alternate" type="application/rss+xml" title="RSS Feed - {L_TOPIC} {PAGE_TITLE}" href="{U_RSS}?t={S_TOPIC_ID}" />
+<!-- ENDIF -->
+<!-- ENDIF -->
+
+<!-- // MOD : RSS Feeds (V0.0.1) - End -->
+
+#
+#-----[DIY]----------------------------------------------------------
+#
+IMPORTANT !
+	
+Log on to Administration Control Panel
+
+#####################################################################
+A) Add RSS Feed module :
+
+	A.1) Navigate to "System" tab.
+	A.2) Under "Module management" click on "Administration Control Panel".
+	A.3) Click on "System".
+	A.4) Clik on "General tasks".
+	A.5) in "add module" select "RSS" and click on "add module", them click on "yes".
+	A.6) Afert refresh screen click RSS "enable".
+	A.7) Afert refresh screen click again in "System" tab.
+	A.8) Now you will able to see "RSS" down the "General tasks" in left menu.
+	A.9) Click on "RSS" and set to your liking.
+
+#####################################################################
+B) Purge the templates :
+
+	B.1) Navigate to "Styles" Tab.
+	B.2) Under "Style components " click on "Templates".
+	B.3) Under "Actions" click on "Refresh".
+	B.4) in the next screen, click on "Yes".
+	B.5) Repeat last 2 steps to each instaled style.
+	
+#####################################################################
+C) Enjoy it !.
+
+#
+#-----[ SAVE/CLOSE ALL FILES ]---------------------------------------
+#
+# EoM
