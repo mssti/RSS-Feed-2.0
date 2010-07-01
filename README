@@ -1,0 +1,22 @@
+Welcome to the MSSTI Github repository for my MODs for phpBB3.
+
+******************************************************************************
+* Title :
+* RSS Feed 2.0 Version 1.0.3
+******************************************************************************
+* Description:
+* This MOD adds a Really Simple Syndication (RSS) content to your forum.
+* Can display list of Forums, Topics, Post, user post ( like ego search ) a particular forum or particular topic.
+* Also It have pagination to have a fast view and better performance.
+******************************************************************************
+* Please keep in mind that this is still early in development, so not everything is in place or working.
+* It is not recommended that you install it on a live forum.
+* Let me know if you find anything broken, though, so I can take a look.
+* Also, good ideas and bug reports are always welcome.
+******************************************************************************
+* phpBB version: phpbb 3.0.2
+******************************************************************************
+* License: GNU General Public License v2
+******************************************************************************
+* Before adding this MOD to your forum, you should back up all files related to this MOD.]
+******************************************************************************
